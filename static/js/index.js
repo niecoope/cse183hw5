@@ -11,7 +11,9 @@ let init = (app) => {
     app.data = {
         // Complete as you see fit.
         add_mode: false,
-        add_post: "",
+        add_content: "",
+        current_email: "",
+        rows: [],
     };
 
     app.enumerate = (a) => {
@@ -22,7 +24,33 @@ let init = (app) => {
     };
 
     app.add_post = function () {
+        axios.post(add_post_url,
+            {
+                content: app.vue.add_content,
+            }).then(function (response) {
+            app.vue.rows.push({
+                id: response.data.id,
+                content: app.vue.add_content,
+                name: response.data.name,
+                email: response.data.email,
+            });
+            app.enumerate(app.vue.rows);
+            app.vue.add_content = "";
+            app.set_add_status(false);
+        });
+    };
 
+    app.delete_post = function(row_idx) {
+        let id = app.vue.rows[row_idx].id;
+        axios.get(delete_post_url, {params: {id: id}}).then(function (response) {
+            for (let i = 0; i < app.vue.rows.length; i++) {
+                if (app.vue.rows[i].id === id) {
+                    app.vue.rows.splice(i, 1);
+                    app.enumerate(app.vue.rows);
+                    break;
+                }
+            }
+            });
     };
 
     app.set_add_status = function (new_status) {
@@ -32,6 +60,8 @@ let init = (app) => {
     // This contains all the methods.
     app.methods = {
         set_add_status: app.set_add_status,
+        add_post: app.add_post,
+        delete_post: app.delete_post,
 
         // Complete as you see fit.
     };
@@ -47,6 +77,10 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
+        axios.get(load_posts_url).then(function (response) {
+            app.vue.rows = app.enumerate(response.data.rows);
+            app.vue.current_email = response.data.email;
+        });
     };
 
     // Call to the initializer.

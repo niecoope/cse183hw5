@@ -39,7 +39,46 @@ def index():
     return dict(
         # COMPLETE: return here any signed URLs you need.
         my_callback_url = URL('my_callback', signer=url_signer),
-        load_posts_url=URL('load_contacts', signer=url_signer),
-        add_post_url=URL('add_contact', signer=url_signer),
-        delete_post_url=URL('delete_contact', signer=url_signer),
+        load_posts_url=URL('load_posts', signer=url_signer),
+        add_post_url=URL('add_post', signer=url_signer),
+        delete_post_url=URL('delete_post', signer=url_signer),
     )
+
+@action('load_posts')
+@action.uses(url_signer.verify(), db)
+def load_posts():
+    rows = db(db.post).select().as_list()
+    r = db(db.auth_user.email == get_user_email()).select().first()
+    email = r.email if r is not None else "Unknown"
+    # print(rows)
+    print("email in load_posts: ", email)
+    return dict(
+        rows=rows,
+        email=email,
+    )
+
+@action('add_post', method="POST")
+@action.uses(url_signer.verify(), db)
+def add_post():
+    r = db(db.auth_user.email == get_user_email()).select().first()
+    name = r.first_name + " " + r.last_name if r is not None else "Unknown"
+    email = r.email if r is not None else "Unknown"
+    print("email in add_post: ", email)
+    id = db.post.insert(
+        content=request.json.get('content'),
+        name=name,
+        email=email,
+    )
+    return dict(
+        id=id,
+        name=name,
+        email=email,
+    )
+
+@action('delete_post')
+@action.uses(url_signer.verify(), db)
+def delete_post():
+    id = request.params.get('id')
+    assert id is not None
+    db(db.post.id == id).delete()
+    return "ok"

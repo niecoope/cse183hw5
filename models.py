@@ -22,6 +22,8 @@ def get_time():
 ## always commit your models to avoid problems later
 db.define_table('post',
                 Field('content'),
+                Field('name'),
+                Field('email'),
                 )
 
 db.commit()

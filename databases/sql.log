@@ -40,3 +40,55 @@ success!
 timestamp: 2021-05-13T11:04:03.511514
 ALTER TABLE "post" ADD "email" CHAR(512);
 success!
+timestamp: 2021-05-14T10:26:41.698304
+ALTER TABLE "post" ADD "dislikes" CHAR(512);
+timestamp: 2021-05-14T10:26:41.702072
+ALTER TABLE "post" ADD "likes" CHAR(512);
+success!
+success!
+timestamp: 2021-05-14T11:55:13.826260
+ALTER TABLE "post" ADD "thumbsup" CHAR(1);
+timestamp: 2021-05-14T11:55:13.829059
+ALTER TABLE "post" ADD "thumbsdown" CHAR(1);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2021-05-23T11:33:35.322608
+ALTER TABLE "post" ADD "comment_content" TEXT;
+timestamp: 2021-05-23T11:33:35.324534
+ALTER TABLE "post" ADD "comment_name" TEXT;
+success!

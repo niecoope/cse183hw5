@@ -35,15 +35,26 @@
 <!--        <td>{{r}}</td>-->
         <td>
           <div class="card">
+
             <div class="card-content">
               <div class="content">
                 {{r.content}}
               </div>
               <div class="content">
-                {{r.name}}
+                author: {{r.name}}
               </div>
             </div>
-            <button v-if="r.email === current_email" @click="delete_post(r._idx)" class="button is-danger">
+            <span @mouseleave="show_likers_out(r._idx)">
+                <span @mouseenter="show_likers_over(r._idx)">
+                  <i v-if="r.thumbs_up" @click="modify_post(r._idx, current_email, true, false)" class="fa fa-thumbs-up"></i>
+                  <i v-if="r.thumbs_down" @click="modify_post(r._idx, current_email, false, false)" class="fa fa-thumbs-down"></i>
+                  <i v-if="!r.thumbs_up" @click="modify_post(r._idx, current_email, true, true)" class="fa fa-thumbs-o-up"></i>
+                  <i v-if="!r.thumbs_down" @click="modify_post(r._idx, current_email, false, true)" class="fa fa-thumbs-o-down"></i>
+                    <div v-if="r.show_likers">the likers of the post:  {{r.likes}}</div>
+                    <div v-if="r.show_likers">the dislikers of the post:  {{r.dislikes}}</div>
+                </span>
+            </span>
+            <button v-if="r.email === current_email" @click="delete_post(r._idx)" class="button is-pulled-right is-danger">
                 <i class="fa fa-trash"></i>
             </button>
           </div>
@@ -60,6 +71,7 @@
 <script>
   let load_posts_url = "[[=XML(load_posts_url)]]";
   let add_post_url = "[[=XML(add_post_url)]]";
+  let modify_post_url = "[[=XML(modify_post_url)]]";
   let delete_post_url = "[[=XML(delete_post_url)]]";
   let my_callback_url = "[[=XML(my_callback_url)]]";
 </script>
